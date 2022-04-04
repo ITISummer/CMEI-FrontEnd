@@ -57,13 +57,6 @@
                 <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
             </div>
         </div>
-
-        <div class="layui-form-item">
-            <div class="layui-input-block">
-                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
-            </div>
-        </div>
-    </div>
     </div>
     <script src="../../../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
     <script>
@@ -71,6 +64,7 @@
             var form = layui.form,
                 layer = layui.layer,
                 $ = layui.$;
+            var laydate = layui.laydate;
             lay('#sign_date').each(function () {
                 //执行一个laydate实例
                 laydate.render({ elem: this, trigger: 'click' }); //指定元素

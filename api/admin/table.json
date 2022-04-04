@@ -1,0 +1,37 @@
+{
+    "code": 0,
+    "msg": "",
+    "count": 1000,
+    "data": [
+        {
+            "id": 10000,
+            "username": "user-0",
+            "role": "女",
+            "city": "深圳",
+            "signDate": "签名-0",
+            "loginDate": 255,
+            "isdisabled": "1",
+            "introduce": "啦啦啦啦啦~"
+        },
+        {
+            "id": 10000,
+            "username": "user-0",
+            "role": "女",
+            "city": "深圳",
+            "signDate": "签名-0",
+            "loginDate": 255,
+            "isdisabled": "1",
+            "introduce": "啦啦啦啦啦~"
+        },
+        {
+            "id": 10000,
+            "username": "user-0",
+            "role": "女",
+            "city": "深圳",
+            "signDate": "签名-0",
+            "loginDate": 255,
+            "isdisabled": "1",
+            "introduce": "啦啦啦啦啦~"
+        }
+    ]
+}

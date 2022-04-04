@@ -21,15 +21,16 @@
           "icon": "fa fa-home",
           "target": "_self",
           "child": [
-            {
-              "title": "个人信息",
-              "href": "page/form.html",
-              "icon": "fa fa-tachometer",
-              "target": "_self"
+              {
+                "title": "个人信息",
+                "href": "page/admin/views/personInfo.html",
+                "icon": "fa fa-tachometer",
+                "target": "_self"
             },
+ 
             {
               "title": "添加新管理员",
-              "href": "page/table.html",
+              "href": "page/admin/views/addAdmin.html",
               "icon": "fa fa-tachometer",
               "target": "_self"
             }
@@ -43,13 +44,19 @@
           "child": [
             {
               "title": "添加机构",
-              "href": "page/form.html",
+              "href": "page/organManger/views/addOrgan.html",
               "icon": "fa fa-list-alt",
               "target": "_self"
             },
             {
               "title": "查询机构",
-              "href": "page/table.html",
+              "href": "page/organManger/views/selectOrgan.html",
+              "icon": "fa fa-navicon",
+              "target": "_self"
+            },
+            {
+              "title": "编辑",
+              "href": "page/organManger/views/edit.html",
               "icon": "fa fa-navicon",
               "target": "_self"
             }
@@ -102,14 +109,14 @@
           "target": "_self",
           "child": [ 
             {
-              "title": "添加用户",
-              "href": "page/form.html",
+              "title": "个人信息",
+              "href": "page/user/form.html",
               "icon": "fa fa-hourglass-end",
               "target": "_self"
             },
             {
-              "title": "查询用户",
-              "href": "page/table.html",
+              "title": "添加用户",
+              "href": "page/user/table.html",
               "icon": "fa fa-hourglass-end",
               "target": "_self"
             }

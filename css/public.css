@@ -41,6 +41,22 @@ body {
     color: #a29c9c;
 }
 
+
+.layui-form > .admin_update_button{
+   text-align: center;
+}
+
+.layui-form> .layui-form-item > .province_city_select{
+    display: grid;
+    grid-template-columns: 50% 50%;
+    padding: 10px;
+}
+.layui-form > .layui-form-item >.province_city_select >.layui-input-block{
+    margin: 0;
+}
+
+
+
 /**搜索框*/
 .layuimini-container .table-search-fieldset {
     margin: 0;
