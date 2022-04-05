@@ -55,8 +55,8 @@
               "target": "_self"
             },
             {
-              "title": "编辑",
-              "href": "page/organManger/views/edit.html",
+              "title": "编辑机构信息",
+              "href": "page/organManger/views/editOrgan.html",
               "icon": "fa fa-navicon",
               "target": "_self"
             }
