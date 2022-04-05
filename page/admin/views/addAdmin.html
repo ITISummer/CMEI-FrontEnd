@@ -112,12 +112,12 @@
                 //监听添加、删除按钮的点击事件
                 table.on("toolbar(currentTableFilter)", function (obj) {
                     const { event } = obj
-                    event === 'add' ? layOpen() : ''
+                    event === 'add' ? layOpen() : layer.msg("删除拉~") //点击事件如果是add则弹窗框框 删除暂时还没做~
                 })
                 //监听单列中编辑和删除按钮的点击事件。
                 table.on("tool(currentTableFilter)", function (obj) {
                     const { event } = obj
-                    event === 'edit' ? layOpen() : ''
+                    event === 'edit' ? layOpen() : layer.msg("删除拉~")
                 })
             }
             //弹出框内容渲染逻辑。

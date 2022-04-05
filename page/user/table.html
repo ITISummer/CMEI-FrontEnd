@@ -67,110 +67,201 @@
     </div>
     <script src="../../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
     <script>
-        layui.use(['form', 'table'], function () {
-            var $ = layui.jquery,
+              layui.use(['form', 'table'], function () {
+            let $ = layui.jquery,
                 form = layui.form,
-                table = layui.table;
+                table = layui.table,
+                laydate = layui.laydate;
+            // table渲染逻辑
+            function tableRender() {
+                table.render({
+                    elem: '#currentTableId',
+                    url: '../../../api/admin/table.json',
+                    toolbar: '#toolbarDemo',
+                    defaultToolbar: ['filter', 'exports', 'print', {
+                        title: '提示',
+                        layEvent: 'LAYTABLE_TIPS',
+                        icon: 'layui-icon-tips'
+                    }],
+                    cols: [[
+                        { type: "checkbox", width: 50 },
+                        { field: 'id', width: 80, title: 'ID', sort: true },
+                        { field: 'username', width: 80, title: '用户名' },
+                        { field: 'role', width: 80, title: '角色', sort: true },
+                        { field: 'signDate', width: 80, title: '注册日期' },
+                        { field: 'loginDate', title: '登录日期', width: 80, },
+                        { field: 'isdisabled', width: 80, title: '是否被禁用', },
+                        { field: 'introduce', width: 80, title: '介绍', sort: true },
+                        { title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "right" }
+                    ]],
 
-            table.render({
-                elem: '#currentTableId',
-                url: '../../api/admin/table.json',
-                toolbar: '#toolbarDemo',
-                defaultToolbar: ['filter', 'exports', 'print', {
-                    title: '提示',
-                    layEvent: 'LAYTABLE_TIPS',
-                    icon: 'layui-icon-tips'
-                }],
-                cols: [[
-                    { type: "checkbox", width: 50 },
-                    { field: 'id', width: 80, title: 'ID', sort: true },
-                    { field: 'username', width: 80, title: '用户名' },
-                    { field: 'role', width: 80, title: '角色', sort: true },
-                    { field: 'signDate', width: 80, title: '注册日期' },
-                    { field: 'loginDate', title: '登录日期', width: 80, },
-                    { field: 'isdisabled', width: 80, title: '是否被禁用', },
-                    { field: 'introduce', width: 80, title: '介绍', sort: true },
-                    { title: '操作', minWidth: 150, toolbar: '#currentTableBar',align:"right" }
-                ]],
-                limits: [10, 15, 20, 25, 50, 100],
-                limit: 15,
-                page: true,
-                skin: 'line'
-            });
-
-            // 监听搜索操作
-            form.on('submit(data-search-btn)', function (data) {
-                var result = JSON.stringify(data.field);
-                layer.alert(result, {
-                    title: '最终的搜索信息'
+                    limits: [10, 15, 20, 25, 50, 100],
+                    limit: 15,
+                    page: true,
+                    skin: 'line'
                 });
-
-                //执行搜索重载
-                table.reload('currentTableId', {
-                    page: {
-                        curr: 1
-                    }
-                    , where: {
-                        searchParams: result
-                    }
-                }, 'data');
-
-                return false;
-            });
-
-            /**
-             * toolbar监听事件
-             */
-            table.on('toolbar(currentTableFilter)', function (obj) {
-                if (obj.event === 'add') {  // 监听添加操作
-                    var index = layer.open({
-                        title: '添加用户',
-                        type: 2,
-                        shade: 0.2,
-                        maxmin: true,
-                        shadeClose: true,
-                        area: ['100%', '100%'],
-                        content: './table/add.html',
-                    });
-                    $(window).on("resize", function () {
-                        layer.full(index);
-                    });
-                } else if (obj.event === 'delete') {  // 监听删除操作
-                    var checkStatus = table.checkStatus('currentTableId')
-                        , data = checkStatus.data;
-                    layer.alert(JSON.stringify(data));
+                //监听添加、删除按钮的点击事件
+                table.on("toolbar(currentTableFilter)", function (obj) {
+                    const { event } = obj
+                    event === 'add' ? layOpen() : layer.msg("删除拉~")
+                })
+                //监听单列中编辑和删除按钮的点击事件。
+                table.on("tool(currentTableFilter)", function (obj) {
+                    const { event } = obj
+                    event === 'edit' ? layOpen() : layer.msg("删除拉~")
+                })
+            }
+            //弹出框内容渲染逻辑。
+            function contentRender() {
+                return `
+    <div class="layui-form layuimini-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label required">用户名</label>
+            <div class="layui-input-block">
+                <input type="text" name="username" lay-verify="required" lay-reqtext="用户名不能为空" placeholder="请输入用户名" value="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label required">角色</label>
+            <div class="layui-input-block">
+                <input   type="radio" name="sex" lay-filter="testRadio"  value="1" title="男" >
+                <input type="radio" name="sex" lay-filter="testRadio" value="0" title="女">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否禁用单选框</label>
+            <div class="layui-input-block">
+                <input type="radio" name="isdisabled" lay-filter="testRadio" value="1" title="是" >
+                <input type="radio" name="isdisabled" lay-filter="testRadio" value="0" title="否">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label required">登录日期</label>
+            <div class="layui-input-block">
+                <input type="text" autocomplete="off" class="layui-input" id="sign_date">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">备注信息</label>
+            <div class="layui-input-block">
+                <textarea name="remark"  class="layui-textarea" placeholder="请输入备注信息"></textarea>
+            </div>
+        </div>
+        </div>
+                `
+            }
+            //判断浏览器大小逻辑
+            function screen() {
+                //获取当前窗口的宽度
+                var width = $(window).width();
+                if (width > 1200) {
+                    return 3;   //大屏幕
+                } else if (width > 992) {
+                    return 2;   //中屏幕
+                } else if (width > 768) {
+                    return 1;   //小屏幕
+                } else {
+                    return 0;   //超小屏幕
                 }
+            }
+            //封装复用的弹出框
+            function layOpen() {
+                layer.open({
+                    type: 0,
+                    content: contentRender(),
+                    area: screen() < 2 ? ['90%', '80%'] : ['1280px', '720px'],
+                    btnAlign: 'c',
+                    anim: 1,
+                })
+                //注册日期 弹框渲染
+                lay('#sign_date').each(function () {
+                    //执行一个laydate实例
+                    laydate.render({ elem: this, trigger: 'click' }); //指定元素同时点击时
+                })
+                //解决 radio不渲染的问题
+                form.render("radio")
+            }
+            $(document).on('click', '#btn', function () { //监听添加 编辑的点击事件
+                layOpen()
             });
+            tableRender()
 
-            //监听表格复选框选择
-            table.on('checkbox(currentTableFilter)', function (obj) {
-                console.log(obj)
-            });
 
-            table.on('tool(currentTableFilter)', function (obj) {
-                var data = obj.data;
-                if (obj.event === 'edit') {
 
-                    var index = layer.open({
-                        title: '编辑用户',
-                        type: 2,
-                        shade: 0.2,
-                        maxmin: true,
-                        shadeClose: true,
-                        area: ['100%', '100%'],
-                        content: './table/edit.html',
-                    });
-                    $(window).on("resize", function () {
-                        layer.full(index);
-                    });
-                    return false;
-                } else if (obj.event === 'delete') {
-                    layer.confirm('真的删除行么', function (index) {
-                        obj.del();
-                        layer.close(index);
-                    });
-                }
-            });
+
+            // // 监听搜索操作
+            // form.on('submit(data-search-btn)', function (data) {
+            //     var result = JSON.stringify(data.field);
+            //     layer.alert(result, {
+            //         title: '最终的搜索信息'
+            //     });
+
+            //     //执行搜索重载
+            //     table.reload('currentTableId', {
+            //         page: {
+            //             curr: 1
+            //         }
+            //         , where: {
+            //             searchParams: result
+            //         }
+            //     }, 'data');
+
+            //     return false;
+            // });
+
+            // /**
+            //  * toolbar监听事件
+            //  */
+            // table.on('toolbar(currentTableFilter)', function (obj) {
+            //     if (obj.event === 'add') {  // 监听添加操作
+            //         var index = layer.open({
+            //             title: '添加用户',
+            //             type: 2,
+            //             shade: 0.2,
+            //             maxmin: true,
+            //             shadeClose: true,
+            //             area: ['100%', '100%'],
+            //             content: './table/add.html',
+            //         });
+            //         $(window).on("resize", function () {
+            //             layer.full(index);
+            //         });
+            //     } else if (obj.event === 'delete') {  // 监听删除操作
+            //         var checkStatus = table.checkStatus('currentTableId')
+            //             , data = checkStatus.data;
+            //         layer.alert(JSON.stringify(data));
+            //     }
+            // });
+
+            // //监听表格复选框选择
+            // table.on('checkbox(currentTableFilter)', function (obj) {
+            //     console.log(obj)
+            // });
+
+            // table.on('tool(currentTableFilter)', function (obj) {
+            //     var data = obj.data;
+            //     if (obj.event === 'edit') {
+
+            //         var index = layer.open({
+            //             title: '编辑用户',
+            //             type: 2,
+            //             shade: 0.2,
+            //             maxmin: true,
+            //             shadeClose: true,
+            //             area: ['100%', '100%'],
+            //             content: './table/edit.html',
+            //         });
+            //         $(window).on("resize", function () {
+            //             layer.full(index);
+            //         });
+            //         return false;
+            //     } else if (obj.event === 'delete') {
+            //         layer.confirm('真的删除行么', function (index) {
+            //             obj.del();
+            //             layer.close(index);
+            //         });
+            //     }
+            // });
 
         });
     </script>
